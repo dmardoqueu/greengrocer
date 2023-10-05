@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greengrocer/src/config/custom_colors.dart';
 import 'package:greengrocer/src/models/item_model.dart';
+import 'package:greengrocer/src/products/product_screen.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
 class ItemTile extends StatelessWidget {
@@ -17,54 +18,66 @@ class ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Card(
-          elevation: 3,
-          shadowColor: Colors.grey.shade300,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                //IMAGEM
-                Expanded(
-                  child: Image.asset(item.img),
-                ),
-
-                //NOME
-                Text(
-                  item.itemName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                //PREÇO E UNIDADE
-                Row(
-                  children: [
-                    Text(
-                      utilServices.priceToCurrency(item.price),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColors.customSwatchColor,
-                      ),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+              return ProductScreen(item: item);
+            }));
+          },
+          child: Card(
+            elevation: 3,
+            shadowColor: Colors.grey.shade300,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  //IMAGEM
+                  Expanded(
+                    child: Hero(
+                      tag: item.img,
+                      child: Image.asset(item.img),
                     ),
-                    Text(
-                      '/${item.unit}',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
+                  ),
+
+                  //NOME
+                  Text(
+                    item.itemName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  //PREÇO E UNIDADE
+                  Row(
+                    children: [
+                      Text(
+                        utilServices.priceToCurrency(item.price),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.customSwatchColor,
+                        ),
                       ),
-                    )
-                  ],
-                )
-              ],
+                      Text(
+                        '/${item.unit}',
+                        style: TextStyle(
+                          color: Colors.grey.shade500,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
+
+//ADICIONAR AO CARRINHO
         Positioned(
           top: 4,
           right: 4,
